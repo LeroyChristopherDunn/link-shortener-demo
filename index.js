@@ -10,6 +10,8 @@ const linkMap = {
     '3': "/redirect-3",
 }
 
+const linkStats = []
+
 //Here we are configuring express to use body-parser as middle-ware.
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -27,6 +29,15 @@ app.get('/links/:linkId', function(req, res){
     const linkId = req.params.linkId;
     const redirectUrl = linkMap[linkId];
     if (redirectUrl) {
+        const event = {
+            date: new Date().getTime(),
+            key: linkId,
+            value: redirectUrl,
+            agent: req.header('user-agent'),
+            referrer: req.header('referrer') || null,
+            ip: req.header('x-forwarded-for') || req.socket.remoteAddress,
+        }
+        linkStats.push(event);
         res.redirect(redirectUrl);
         return;
     }
@@ -51,6 +62,10 @@ app.get('/links', function(req, res){
         result[`localhost:${PORT}/links/${key}`] = linkMap[key]
     })
     res.json(result);
+});
+
+app.get('/stats', function(req, res){
+    res.json(linkStats);
 });
 
 app.listen(PORT, function(err){

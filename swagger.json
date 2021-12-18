@@ -194,6 +194,33 @@
           }
         }
       }
+    },
+    "/events": {
+      "get": {
+        "tags": [
+          "event"
+        ],
+        "summary": "Get all link events",
+        "description": "",
+        "operationId": "findAllLinkEvents",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/LinkEvent"
+              }
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -215,6 +242,31 @@
         "redirectUrl": {
           "type": "string",
           "example": "https://www.google.com"
+        }
+      }
+    },
+    "LinkEvent": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "dateUnix": {
+          "type": "integer"
+        },
+        "link": {
+          "$ref": "#/definitions/Link"
+        },
+        "agent": {
+          "type": "string",
+          "example": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:95.0) Gecko/20100101 Firefox/95.0"
+        },
+        "referrer": {
+          "type": "string"
+        },
+        "ip": {
+          "type": "string",
+          "example": "102.32.73.67"
         }
       }
     }

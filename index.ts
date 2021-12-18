@@ -1,4 +1,5 @@
 import {MockLinkRepository} from "./LinkRepository";
+import {MockLinkEventRepository} from "./LinkEventRepository";
 
 const express = require('express');
 const app = express();
@@ -11,7 +12,7 @@ const URL = `localhost:${PORT}`;
 const LINK_URL_PREFIX = `${URL}/x`;
 
 const linkRepo = new MockLinkRepository(LINK_URL_PREFIX);
-const linkStats = []
+const eventRepo = new MockLinkEventRepository();
 
 //Here we are configuring express to use body-parser as middle-ware.
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -26,14 +27,8 @@ app.get('/x/:path', function(req, res){
         res.send('Not found');
         return;
     }
-    const event = {
-        date: new Date().getTime(),
-        link,
-        agent: req.header('user-agent'),
-        referrer: req.header('referrer') || null,
-        ip: req.header('x-forwarded-for') || req.socket.remoteAddress,
-    }
-    linkStats.push(event);
+    const event = MockLinkEventRepository.fromRequest(req, link);
+    eventRepo.save(event);
     res.redirect(link.redirectUrl);
 });
 
@@ -102,8 +97,8 @@ app.delete('/links/:path', function(req, res){
     res.send();
 });
 
-app.get('/stats', function(req, res){
-    res.json(linkStats);
+app.get('/events', function(req, res){
+    res.json(eventRepo.findAll());
 });
 
 app.listen(PORT, function(err){

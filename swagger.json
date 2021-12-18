@@ -1,0 +1,226 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Link Shortener",
+    "description": "Programmable link redirects",
+    "version": "0.0.1",
+    "contact": {
+      "name": "Leroy Dunn",
+      "url": "https://github.com/LeroyChristopherDunn/link-shortener-demo"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "link"
+    },
+    {
+      "name": "Event",
+      "description": "Access link event history"
+    }
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "paths": {
+    "/links": {
+      "post": {
+        "tags": [
+          "link"
+        ],
+        "summary": "Add a new link",
+        "description": "",
+        "operationId": "addLink",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Link object that needs to be added to the store",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Link"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Link"
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "409": {
+            "description": "Link already indexed"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "link"
+        ],
+        "summary": "Update an existing link",
+        "description": "",
+        "operationId": "updatePet",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Pet object that needs to be added to the store",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Link"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Link"
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "404": {
+            "description": "Link not found"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "link"
+        ],
+        "summary": "Get all links",
+        "description": "Returns links",
+        "operationId": "findAllLinks",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Link"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/links/{path}": {
+      "get": {
+        "tags": [
+          "link"
+        ],
+        "summary": "Find link by path",
+        "description": "Returns a single link",
+        "operationId": "findLinkByPath",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Link"
+            }
+          },
+          "400": {
+            "description": "Invalid path supplied"
+          },
+          "404": {
+            "description": "Link not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "link"
+        ],
+        "summary": "Deletes a link",
+        "description": "",
+        "operationId": "deleteLink",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "description": "Link path to delete",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid path supplied"
+          },
+          "404": {
+            "description": "Link not found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Link": {
+      "type": "object",
+      "required": [
+        "path",
+        "redirectUrl"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "example": "my-custom-path"
+        },
+        "url": {
+          "type": "string",
+          "example": "https://www.google.com"
+        },
+        "redirectUrl": {
+          "type": "string",
+          "example": "https://www.google.com"
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  }
+}
